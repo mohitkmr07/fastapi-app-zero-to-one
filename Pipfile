@@ -11,6 +11,7 @@ starlette = "*"
 python-dotenv = "*"
 pydantic = "*"
 psycopg2-binary = "*"
+contextvars = "*"
 
 [dev-packages]
 
