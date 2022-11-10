@@ -12,6 +12,7 @@ python-dotenv = "*"
 pydantic = "*"
 psycopg2-binary = "*"
 contextvars = "*"
+aioredis = "*"
 
 [dev-packages]
 

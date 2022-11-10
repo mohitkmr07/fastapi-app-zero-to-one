@@ -30,7 +30,7 @@ async def get_users(db: Session = Depends(get_db)) -> List[UserResponse]:
 async def get_user_by_id(id: UUID,
                          db: Session = Depends(get_db)
                          ) -> UserResponse:
-    return user_service.get_user_by_id(id=id, db=db)
+    return await user_service.get_user_by_id(id=id, db=db)
 
 
 @api_router.put("/{id}", response_model=UserResponse, status_code=HTTPStatus.OK)

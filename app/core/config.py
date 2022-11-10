@@ -1,4 +1,4 @@
-from pydantic import PostgresDsn
+from pydantic import PostgresDsn, RedisDsn
 from starlette.config import Config
 from starlette.datastructures import Secret
 
@@ -29,6 +29,24 @@ class Settings:
     POOL_RESET_ON_RETURN = config("POOL_RESET_ON_RETURN", cast=str, default="rollback")
     POOL_TIMEOUT_IN_SECONDS = config("POOL_TIMEOUT_IN_SECONDS", cast=int, default=30)
     POOL = config("POOL", cast=str, default="~sqlalchemy.pool.QueuePool")
+    # REDIS_URL = config("REDIS_URL", cast=str)
+    REDIS_MAX_CONNECTION = config("REDIS_MAX_CONNECTION", cast=int, default=1)
+
+    REDIS_SCHEME = config("REDIS_SCHEME", cast=str, default="redis")
+    REDIS_USER = config("REDIS_USER", cast=str, default=None)
+    REDIS_PASSWORD = config("REDIS_PASSWORD", cast=Secret)
+    REDIS_URL = config("REDIS_URL", cast=str)
+    REDIS_PORT = config("REDIS_PORT", cast=str, default="6379")
+    REDIS_DB = config("REDIS_DB", cast=str, default="0")
+
+    REDIS_URI: str = RedisDsn.build(
+        scheme=REDIS_SCHEME,
+        user=REDIS_USER,
+        password=str(REDIS_PASSWORD),
+        host=REDIS_URL,
+        port=REDIS_PORT,
+        path=f"/{REDIS_DB or ''}",
+    )
 
 
 settings = Settings()

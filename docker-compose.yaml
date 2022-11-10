@@ -12,6 +12,23 @@ services:
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
 
+  redis:
+    image: docker.io/bitnami/redis:7.0
+    command:
+      - /bin/sh
+      - -c
+      # - Double dollars, so that the variable is not expanded by Docker Compose
+      # - Surround by quotes, so that the shell does not split the password
+      # - The ${variable:?message} syntax causes shell to exit with a non-zero
+      #   code and print a message, when the variable is not set or empty
+      - redis-server --requirepass test123
+    ports:
+      - '6379:6379'
+    volumes:
+      - ./data/redis:/bitnami/redis/data
+    env_file:
+      - dev.env
+
   fast-api-app:
     image: fastapi-app
     ports:
@@ -31,3 +48,5 @@ services:
       - POOL_RESET_ON_RETURN=rollback
       - POOL_TIMEOUT_IN_SECONDS=30
       - POOL=~class:`~sqlalchemy.pool.QueuePool`
+      - REDIS_URL=redis
+      - REDIS_MAX_CONNECTION=10
